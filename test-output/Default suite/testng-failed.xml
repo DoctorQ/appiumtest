@@ -5,8 +5,9 @@
     <classes>
       <class name="org.gradle.AppiumTest">
         <methods>
-          <include name="webviewTest"/>
+          <include name="tearDown"/>
           <include name="setUp"/>
+          <include name="postMessage"/>
         </methods>
       </class> <!-- org.gradle.AppiumTest -->
     </classes>
