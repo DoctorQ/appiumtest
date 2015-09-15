@@ -12,8 +12,10 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -41,7 +43,7 @@ public class AppiumTest {
 	@Test
 	public void webviewTest() throws InterruptedException {
 		AndroidElement e1 = driver
-				.findElementByAndroidUIAutomator("resourceId(\"com.wuba:id/cate_icon2\")");
+				.findElementByAndroidUIAutomator("text(\"房产\")");
 		e1.click();
 		switchToWeb();
 
@@ -64,31 +66,64 @@ public class AppiumTest {
 	@Test
 	public void postMessage() throws InterruptedException {
 		AndroidElement e1 = driver
-				.findElementByAndroidUIAutomator("resourceId(\"com.wuba:id/cate_icon2\")");
+				.findElementByAndroidUIAutomator("text(\"房产\")");
 		e1.click();
+		Thread.sleep(5 * 1000);
 		AndroidElement e2 = driver
 				.findElementByAndroidUIAutomator("resourceId(\"com.wuba:id/title_right_btn\")");
 		e2.click();
-
-		driver.findElementByAndroidUIAutomator(
-				"new UiSelector().descriptionContains(\"" + "整套出租" + "\")")
-				.click();
 		Thread.sleep(5 * 1000);
-
-		driver.swipe(469, 1851, 469, 600, 0);
-		driver.findElementByAndroidUIAutomator(
-				"new UiSelector().descriptionContains(\"" + "发布" + "\")")
-				.click();
-		driver.findElementByAndroidUIAutomator(
-				"resourceId(\"com.wuba:id/positiveButton\")").click();
-		Thread.sleep(5000);
+		
+		//switchToWeb();
+//		System.out.println(driver.getCurrentUrl());
+		AndroidElement e3 = driver.findElementByAndroidUIAutomator(
+				"new UiSelector().descriptionContains(\"" + "整套出租" + "\")");
+		e3.click();
+		Thread.sleep(5 * 1000);
+		
+		
+		driver.swipe(250, 1651, 250, 600, 0);
+		Thread.sleep(5 * 1000);
+		switchToWeb();
+		Thread.sleep(5 * 1000);
+		System.out.println(driver.getCurrentUrl());
+		Thread.sleep(5 * 1000);
+		AndroidElement e4 = (AndroidElement) driver
+				.findElement(By.className("input")).findElements(By.tagName("input"))
+				.get(0);
+		e4.click();
+		
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		
+//		AndroidElement e4 = driver.findElementByAndroidUIAutomator(
+//				"new UiSelector().descriptionContains(\"" + "1-30字" + "\")");
+//		e4.click();
+		//e4.sendKeys("123");
+		
+//		driver.findElementByAndroidUIAutomator(
+//				"new UiSelector().descriptionContains(\"" + "发布" + "\")")
+//				.click();
+//		driver.findElementByAndroidUIAutomator(
+//				"resourceId(\"com.wuba:id/positiveButton\")").click();
+//		driver.findElementByAndroidUIAutomator(
+//				"resourceId(\"com.wuba:id/title_left_btn\")").click();
+//		driver.findElementByAndroidUIAutomator(
+//				"resourceId(\"com.wuba:id/positiveButton\")").click();
+//		driver.findElementByAndroidUIAutomator(
+//				"resourceId(\"com.wuba:id/title_left_btn\")").click();
+		
+		
+		//Thread.sleep(15000);
+		
 
 	}
 
 	private void switchToWeb() {
 		Set<String> contextNames = driver.getContextHandles();
 		for (String contextName : contextNames) {
-			if (contextName.toLowerCase().contains("webview")) {
+			System.out.println(contextNames);
+			if (contextName.toLowerCase().contains("webview_com.wuba")) {
+				System.out.println(contextName);
 				contextName = contextName
 						.substring(0, contextName.indexOf("_"));
 				driver.context(contextName);
@@ -111,8 +146,9 @@ public class AppiumTest {
 		}
 	}
 
-	@AfterMethod
+	@AfterClass
 	public void tearDown() {
+		System.out.println("结束");
 		driver.quit();
 	}
 
